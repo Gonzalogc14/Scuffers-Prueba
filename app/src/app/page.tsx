@@ -8,6 +8,8 @@ export const dynamic = 'force-dynamic';
 
 type Fila = Record<string, any>;
 
+const PAISES: Record<string, string> = { DE: 'Alemania', ES: 'España' };
+
 const TH = 'py-3 px-3 text-[13px] font-medium uppercase tracking-wider';
 const TD = 'num px-3 py-3 text-right';
 
@@ -103,7 +105,7 @@ export default async function Panel() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-12">
       <header className="mb-8">
-        <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-accent">Scuffers Prueba Técnica</p>
+        <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-accent">Prueba Técnica Scuffers</p>
         <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">Resultados Primer Semestre 2026</h1>
         <p className="mt-3 max-w-3xl text-sm text-slate-400">
           Pedidos entregados de enero a junio, sin eliminados ni pedidos de menos de 1 €. Ventas con IVA y envío incluidos.
@@ -157,7 +159,7 @@ export default async function Panel() {
                 <thead className="border-b border-slate-800 text-slate-400"><tr><th className={TH}>País</th><th className={`${TH} text-right`}>Pedidos</th><th className={`${TH} text-right`}>Ventas</th><th className={`${TH} text-right`}>% ventas</th><th className={`${TH} text-right`}>Ticket medio</th></tr></thead>
                 <tbody className="divide-y divide-slate-800/70">
                   {paises.data.map((p) => (
-                    <tr key={p.country}><td className="px-3 py-3 font-semibold text-white">{p.country}</td><td className={TD}>{num(p.pedidos)}</td><td className={TD}>{eur(p.ventas_eur)}</td><td className={TD}>{pct(p.pct_ventas)}</td><td className={TD}>{eur(p.ticket_medio_eur)}</td></tr>
+                    <tr key={p.country}><td className="px-3 py-3 font-semibold text-white">{PAISES[p.country] ?? p.country}</td><td className={TD}>{num(p.pedidos)}</td><td className={TD}>{eur(p.ventas_eur)}</td><td className={TD}>{pct(p.pct_ventas)}</td><td className={TD}>{eur(p.ticket_medio_eur)}</td></tr>
                   ))}
                 </tbody>
               </table>
@@ -225,7 +227,7 @@ export default async function Panel() {
               <div className="num text-2xl font-bold text-white">{eur(c.ingreso_lineas_eur)}</div>
               <div className="mt-1 flex justify-between text-sm text-slate-400">
                 <span>{num(c.unidades)} uds.</span>
-                <span className="font-semibold text-accent">{pct(c.pct)}</span>
+                <span>{pct(c.pct)} del total</span>
               </div>
               {Number(c.ingreso_retirados_eur) > 0 && <p className="mt-2 text-sm text-amber-400">+{eur(c.ingreso_retirados_eur)} de fichas retiradas</p>}
             </div>
@@ -267,10 +269,6 @@ export default async function Panel() {
         </div>
         <p className="mt-3 text-sm text-slate-500">Ingreso del pedido completo, sin descontar el código. Un pedido con dos códigos aparece en ambos.</p>
       </Seccion>
-
-      <footer className="border-t border-slate-800 pt-8 text-center text-sm text-slate-500">
-        Datos consolidados por el equipo de BI de Scuffers
-      </footer>
     </div>
   );
 }
