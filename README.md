@@ -454,14 +454,14 @@ Parto de los 767 pedidos de la tabla `orders`. Quito los 48 de julio (quedan 719
 
 ## 3. Decisiones de presentación
 
-El panel es un único relato de arriba abajo con una barra de acceso rápido, para que cada equipo salte a lo suyo: dirección a ventas, marketing a canales, producto al catálogo y ecommerce a promociones.
-Lo primero son las cifras de cabecera con su criterio de cálculo escrito en pantalla, porque es lo que dirección mira antes de decidir y debe poder leerse sin contexto.
-Después va la evolución mensual y, justo debajo, los canales con el título «Recomendación de inversión prioritaria», porque es la decisión para la que se convoca la reunión. El ranking se ordena por IEC y no por ticket medio, y TikTok Ads se marca en ámbar con su aviso para que no se lea como un canal al que escalar.
-Todos los gráficos parten de cero, junio se atenúa por sus pedidos pendientes y cada gráfico lleva su tabla debajo para poder comprobar la cifra exacta.
-Dejé fuera a propósito las proyecciones y los análisis de recompra y descuentos, que se quedan en el README, para no recargar un panel que se abre sin nadie al lado.
-Probé a poner el ticket medio de cada canal junto al IEC en el mismo gráfico y lo descarté, porque con ese orden Meta Ads quedaba primero y la lectura de dónde invertir salía al revés.
+El panel es un único recorrido de arriba abajo, con una barra para saltar a cada parte: ventas para dirección, canales para marketing, producto para el catálogo y promociones para ecommerce.
+Arriba van las cinco cifras clave con una frase que dice cómo se han calculado (pedidos entregados, sin eliminados ni pedidos de menos de 1 €), porque es lo primero que mira dirección y tiene que entenderse sin que nadie lo explique.
+Después van las ventas por mes y por país y, justo debajo, los canales con el título «Recomendación de inversión prioritaria», que es la decisión para la que se hace la reunión. Ordeno el ranking por IEC y dejo el ticket medio como una columna más, porque por ticket medio Meta Ads sería el primero y por IEC es el último (supuesto 4.10). TikTok sale en gris en el gráfico y con un aviso en ámbar en la tabla, para que nadie lo lea como un canal en el que meter más dinero.
+Los gráficos parten de cero, junio sale más claro porque tiene pedidos pendientes que todavía no cuentan como venta, y cada gráfico va con su tabla para ver la cifra exacta. Al pasar el ratón, el texto se ve claro sobre el fondo oscuro.
+Al principio el porcentaje de cada categoría iba en el color de acento y lo quité porque parecía una subida o una bajada. Ahora va en gris y con «del total» al lado. Los países también los cambié: aparecen como Alemania y España, no como DE y ES.
+Dejé fuera a propósito la evolución de clientes nuevos y recurrentes, los descuentos permanentes y el detalle de TikTok, que se quedan en el README. La propuesta del segundo semestre sí está, pero marcada como simulación y no como previsión. Quería un panel con poco texto, que se pueda leer sin nadie al lado.
 
-Cada cifra del panel sale de una query de `sql/dashboard/`. Varias son las mismas que las de las conclusiones, y el resto (clientes y devoluciones, productos, categorías y códigos promocionales) se añaden para cubrir lo que pide dirección.
+Cada cifra del panel sale de una query de `sql/dashboard/`, que la aplicación ejecuta tal cual contra Supabase, así que coincide con las del README. Varias son las mismas que las de las conclusiones y el resto (clientes y devoluciones, productos, categorías y códigos promocionales) las he añadido para cubrir lo que pide dirección.
 
 ---
 
