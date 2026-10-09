@@ -9,7 +9,8 @@ const num = (v: number, d = 0) => {
   return e.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (f ? ',' + f : '');
 };
 
-const tooltipStyle = { backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: 8, color: '#fff', fontSize: 14 };
+const tooltipStyle = { backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: 8, fontSize: 14 };
+const tooltipTexto = { color: '#f1f5f9' };
 const tick = { fill: '#94a3b8', fontSize: 14 };
 
 export type MesPunto = { mes: string; ventas: number; pedidos: number; ticket: number; incompleto: boolean };
@@ -25,6 +26,8 @@ export function VentasChart({ data }: { data: MesPunto[] }) {
           <Tooltip
             cursor={{ fill: '#1e293b66' }}
             contentStyle={tooltipStyle}
+            itemStyle={tooltipTexto}
+            labelStyle={tooltipTexto}
             formatter={(_v, _n, item) => {
               const p = item.payload as MesPunto;
               return [`${num(p.ventas, 2)} € · ${p.pedidos} pedidos`, 'Ventas'];
@@ -54,6 +57,8 @@ export function IecChart({ data }: { data: IecPunto[] }) {
           <Tooltip
             cursor={{ fill: '#1e293b66' }}
             contentStyle={tooltipStyle}
+            itemStyle={tooltipTexto}
+            labelStyle={tooltipTexto}
             formatter={(v) => [`${num(Number(v), 1)} € por euro invertido`, 'IEC']}
           />
           <Bar dataKey="iec" radius={[0, 4, 4, 0]}>
