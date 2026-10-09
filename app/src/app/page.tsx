@@ -104,13 +104,13 @@ export default async function Panel() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-12">
       <header className="mb-8">
         <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-accent">Scuffers</p>
-        <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">Resultados del primer semestre 2026</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">Resultados Primer Semestre 2026</h1>
         <p className="mt-3 max-w-3xl text-sm text-slate-400">
           Pedidos entregados de enero a junio, sin eliminados ni pedidos de menos de 1 €. Ventas con IVA y envío incluidos.
         </p>
       </header>
 
-      <nav className="sticky top-0 z-10 -mx-4 mb-8 flex gap-6 overflow-x-auto border-b border-slate-800 bg-slate-950/90 px-4 py-3 text-sm backdrop-blur sm:-mx-6 sm:px-6" aria-label="Secciones">
+      <nav className="sticky top-0 z-10 -mx-4 mb-8 flex gap-6 overflow-x-auto border-b border-slate-800 bg-[#0b1220]/90 px-4 py-3 text-sm backdrop-blur sm:-mx-6 sm:px-6" aria-label="Secciones">
         {[['#ventas', 'Ventas'], ['#canales', 'Canales'], ['#producto', 'Producto'], ['#promos', 'Promociones']].map(([h, t]) => (
           <a key={h} href={h} className="whitespace-nowrap text-slate-300 hover:text-accent">{t}</a>
         ))}
