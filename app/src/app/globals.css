@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 html { scroll-behavior: smooth; }
-body { background: #020617; color: #f1f5f9; }
+body { background: #0b1220; color: #f1f5f9; }
 .num { font-variant-numeric: tabular-nums; }
