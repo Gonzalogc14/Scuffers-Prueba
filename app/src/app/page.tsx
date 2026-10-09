@@ -170,7 +170,7 @@ export default async function Panel() {
 
       <Seccion id="canales" titulo="Recomendación de inversión prioritaria" sub="IEC: ingresos atribuidos al canal entre su inversión, de marzo a junio.">
         {masGasto && peorIec && mejorFiable && (
-          <p className="mb-6 max-w-3xl text-base leading-relaxed text-slate-200">
+          <p className="mb-6 max-w-5xl text-base leading-relaxed text-slate-200">
             <strong className="text-white">{masGasto.canal}</strong> concentra el {pct(masGasto.pct_del_gasto)} del gasto con un IEC de {num(masGasto.iec, 1)}
             {masGasto.canal === peorIec.canal ? ', el más bajo' : ''}. <strong className="text-white">{mejorFiable.canal}</strong> devuelve {num(mejorFiable.iec, 1)} con el {pct(mejorFiable.pct_del_gasto)} del gasto.
           </p>
@@ -185,7 +185,7 @@ export default async function Panel() {
             <p className="mb-3 text-[15px] leading-relaxed text-slate-300">
               Si Email mantiene su IEC, atribuiría unos <strong className="text-emerald-400">{eur(R.ingresos_si_email_mantiene_su_iec_eur, 0)}</strong> y Meta dejaría de atribuir {eur(R.ingresos_que_deja_de_atribuir_meta_eur, 0)}.
             </p>
-            <p className="text-sm text-slate-400">Es una simulación, no una previsión. Además, probar TikTok con 100 € al mes durante dos meses.</p>
+            <p className="text-sm text-slate-400">Es una simulación, no una previsión. Además, se puede probar TikTok con 100 € al mes durante dos meses.</p>
           </div>
         </div>
 
@@ -229,7 +229,7 @@ export default async function Panel() {
                 <span>{num(c.unidades)} uds.</span>
                 <span>{pct(c.pct)} del total</span>
               </div>
-              {Number(c.ingreso_retirados_eur) > 0 && <p className="mt-2 text-sm text-amber-400">+{eur(c.ingreso_retirados_eur)} de fichas retiradas</p>}
+              {Number(c.ingreso_retirados_eur) > 0 && <p className="mt-2 text-sm text-amber-400">+{eur(c.ingreso_retirados_eur)} de productos retirados</p>}
             </div>
           ))}
         </div>
