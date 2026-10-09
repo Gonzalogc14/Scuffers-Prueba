@@ -8,15 +8,15 @@
 
 ## 1. Conclusiones de negocio
 
-Todas las conclusiones parten de la misma base de ventas (sección 2): 559 pedidos entregados entre enero y junio que suman 49.447,08 €, con IVA y envío incluidos. El «ingreso de líneas» es cantidad por precio de la línea, sin IVA ni envío. Cada query se puede ejecutar sola y también está en `sql/`.
+Todas las conclusiones parten de la misma base de ventas (sección 2): 559 pedidos entregados entre enero y junio que suman 49.447,08 €, con IVA y envío incluidos. El «ingreso de líneas» es cantidad por precio de la línea, sin IVA ni envío. Cada query se puede ejecutar sola y están almacenadas en `sql/`.
 
 ### 1.1 Junio vende un 30 % menos que abril (7.138 € frente a 10.163 €) por menos pedidos y por la caída de Ropa
 
 **Qué dice el dato:** las ventas pasan de 10.163 € en abril (115 pedidos) a 7.138 € en junio (79 pedidos), un 30 % menos. El ticket medio apenas se mueve (88,38 € en abril y 90,36 € en junio), así que la caída viene del número de pedidos. Por categorías, Ropa baja un 52 % (de 4.109 € a 1.956 €) y Accesorios un 43 %. Deporte, que no existía en abril, suma 947 € en junio y compensa solo una parte.
 
-**Por qué importa:** abril es el mes más alto del semestre, así que no sirve de referencia para el presupuesto de H2. Además, junio tiene 14 pedidos pendientes y ningún mes anterior pasa de 4. Si se entregaran todos con el ticket de junio, sumarían unos 1.265 € y junio quedaría en torno a 8.400 €, un 17 % por debajo de abril. Antes de dar la caída por cierta conviene ver cuántos se entregan en julio y revisar qué productos de Ropa han dejado de venderse (stock, precio o el cambio de ficha de la sudadera).
+**Por qué importa:** abril es el mes más alto del semestre, así que no sirve de referencia para el presupuesto de H2. Además, junio tiene 14 pedidos pendientes y ningún mes anterior pasa de 4. Si se entregaran todos con el ticket de junio, sumarían unos 1.265 € y junio quedaría en torno a 8.400 €, un 17 % por debajo de abril. Antes de dar la caída por cierta conviene ver cuántos se entregan en julio y revisar qué productos de Ropa han dejado de venderse.
 
-**Cómo lo he calculado:** pedidos entregados de enero a junio, sin los eliminados ni los 8 con subtotal inferior a 1 €, agrupados por el mes de `created_at`. Las ventas son `total_amount_cents`. Los 1.265 € son una estimación (14 pedidos por 90,36 €) y no un dato. El ingreso por categoría suma cantidad por precio de la línea de los productos del catálogo, activos y retirados. Las queries son, por orden, la evolución mensual, los pedidos pendientes por mes y el ingreso por categoría y mes.
+**Cómo se ha calculado:** pedidos entregados de enero a junio, sin los eliminados ni los 8 con precio inferior a 1 € (fallos del dato), agrupados por el mes de `created_at`. Las ventas son `total_amount_cents`. Los 1.265 € son una estimación (14 pedidos por 90,36 €) y no un dato. El ingreso por categoría suma cantidad por precio de la línea de los productos del catálogo, activos y retirados. Las queries son, por orden, la evolución mensual, los pedidos pendientes por mes y el ingreso por categoría y mes.
 
 ```sql
 WITH base AS (
@@ -87,9 +87,9 @@ ORDER BY mes, category;
 
 **Qué dice el dato:** Alemania suma 236 pedidos y 24.989 € frente a los 323 pedidos y 24.458 € de España, es decir, la mitad de la facturación con el 42 % de los pedidos. Su ticket es un 40 % más alto (105,89 € frente a 75,72 €) y no se debe al IVA ni al envío, porque el subtotal medio también es mayor (86,49 € frente a 60,79 €). Además repiten más, con 6,6 pedidos por cliente frente a 3,0 en España.
 
-**Por qué importa:** el anexo habla de Alemania como un mercado incipiente, pero ya pesa tanto como España y debería tener presupuesto y seguimiento propios. Hay un riesgo de concentración, porque esos 236 pedidos vienen de solo 36 clientes. El gasto de marketing no tiene país, así que no puedo calcular su IEC por separado. Para H2 recomiendo empezar a registrarlo.
+**Por qué importa:** el anexo habla de Alemania como un mercado incipiente, pero ya pesa tanto como España y debería tener presupuesto y seguimiento propios. Hay un riesgo de concentración, porque esos 236 pedidos vienen de solo 36 clientes. El gasto de marketing no tiene país, así que no se puede calcular su IEC por separado. Para la segunda mitad de año recomiendo empezar a registrarlo.
 
-**Cómo lo he calculado:** uso el país del pedido (`orders.country`). Los clientes son los distintos con algún pedido de ese país. El ticket medio usa `total_amount_cents` y el subtotal medio usa `subtotal_cents`.
+**Cómo se ha calculado:** uso el país del pedido (`orders.country`). Los clientes son los distintos con algún pedido de ese país. El ticket medio usa `total_amount_cents` y el subtotal medio usa `subtotal_cents`.
 
 ```sql
 WITH base AS (
@@ -125,7 +125,7 @@ ORDER BY ventas_eur DESC;
 
 **Por qué importa:** Meta se lleva más de la mitad del dinero y es el canal que menos devuelve, así que es el primer sitio donde mirar para H2. Esto no cambia si cada cliente se atribuye a su primer canal (ver 4.8). Aun así, no daría por hecho que Email aguanta una subida fuerte, porque parte de su IEC puede deberse a que vende a gente que ya compra (ver 1.7). Por eso 1.8 mueve el dinero de forma gradual.
 
-**Cómo lo he calculado:** el IEC es el ingreso atribuido al canal (total de los pedidos entregados, con IVA y envío) entre el gasto del canal, del 1 de marzo al 30 de junio por el cambio en el modelo de atribución. Instagram Ads se suma a Meta Ads y Newsletter a Email. En el gasto quito las copias exactas y paso Google Ads de céntimos a euros. Organic y Direct no tienen gasto y por tanto no tienen IEC. Conviene recordar que el IEC mide ingresos y no beneficio, y que cada pedido cuenta para un solo canal.
+**Cómo se ha calculado:** el IEC es el ingreso atribuido al canal (total de los pedidos entregados, con IVA y envío) entre el gasto del canal, del 1 de marzo al 30 de junio por el cambio en el modelo de atribución. Instagram Ads se suma a Meta Ads y Newsletter a Email. En el gasto quito las copias exactas y paso Google Ads de céntimos a euros. Organic y Direct no tienen gasto y por tanto no tienen IEC. Conviene recordar que el IEC mide ingresos y no beneficio, y que cada pedido cuenta para un solo canal.
 
 ```sql
 WITH base AS (
@@ -179,7 +179,7 @@ ORDER BY iec DESC NULLS LAST;
 
 **Por qué importa:** el gasto de enero y febrero no parece haber sido necesario, así que no volvería a ese nivel. Tampoco creo que el IEC de 19,5 demuestre que escalar TikTok funcione, porque el gasto es mínimo y los pedidos no parecen depender de él. Propongo subirlo a 100 € al mes durante dos meses y ver si los pedidos crecen. La atribución cambió en marzo, así que la comparación entre antes y después es un indicio y no una prueba.
 
-**Cómo lo he calculado:** gasto mensual de TikTok Ads (sin copias exactas) frente a los ingresos y pedidos entregados atribuidos a TikTok Ads. La reducción del 95 % compara el gasto medio mensual de enero y febrero (788,39 €) con el de marzo a junio (39,98 €).
+**Cómo se ha calculado:** gasto mensual de TikTok Ads (sin copias exactas) frente a los ingresos y pedidos entregados atribuidos a TikTok Ads. La reducción del 95 % compara el gasto medio mensual de enero y febrero (788,39 €) con el de marzo a junio (39,98 €).
 
 ```sql
 WITH base AS (
@@ -220,13 +220,13 @@ LEFT JOIN ingresos_mes i ON i.mes = g.mes
 ORDER BY g.mes;
 ```
 
-### 1.5 Deporte ya es el 16,5 % del ingreso de junio, pero el 53 % de lo que ha ingresado viene de dos fichas retiradas
+### 1.5 Deporte ya es el 16,5 % del ingreso de junio, pero el 53 % de lo que ha ingresado viene de dos productos retirados
 
 **Qué dice el dato:** Deporte está en catálogo desde el 1 de mayo e ingresa 873,60 € en mayo y 946,55 € en junio (el 12,8 % y el 16,5 % del mes), mientras Ropa cae un 27 %. Pero 969,60 € de sus 1.820,15 € del semestre (el 53 %) vienen de Camiseta Técnica y Mochila Deporte, que figuran como inactivas. Con solo las dos fichas activas, Leggings Training y Botella Térmica, Deporte ingresa 850,55 €.
 
 **Por qué importa:** producto confía en Deporte para H2, pero la parte activa vende la mitad de lo que parece. Antes de darle presupuesto hay que decidir si se reponen o se sustituyen las dos fichas retiradas. Además solo hay dos meses de historia (ver 4.7), así que la tendencia es todavía muy corta.
 
-**Cómo lo he calculado:** ingreso de líneas de los pedidos de la base, separado por `products.active`. La evolución mensual de Deporte y Ropa sale de la tercera query de 1.1. Aquí no aplico el filtro de catálogo activo, para poder ver cuánto pesan las fichas retiradas.
+**Cómo se ha calculado:** ingreso de líneas de los pedidos de la base, separado por `products.active`. La evolución mensual de Deporte y Ropa sale de la tercera query de 1.1. Aquí no aplico el filtro de catálogo activo, para poder ver cuánto pesan las fichas retiradas.
 
 ```sql
 WITH base AS (
@@ -267,7 +267,7 @@ ORDER BY ingreso_lineas_eur DESC;
 
 **Por qué importa:** un descuento que se aplica siempre ya no es una promoción, es el precio de venta. Mocasines Cuero (10 unidades) y Botas Chelsea (8) venden poco incluso con descuento, así que no parece moverlos. Pantalón Cargo es el más vendido de los seis (62 unidades) y el mejor candidato para probar el precio de catálogo: a 49,95 € le bastaría vender 56 unidades para igualar su ingreso actual de 2.787,52 €.
 
-**Cómo lo he calculado:** líneas de los pedidos de la base con un precio inferior al de catálogo. El descuento es 1 menos el precio de la línea entre el precio de catálogo, y el importe no ingresado es la cantidad por la diferencia de precios. No tiene relación con los códigos promocionales, que no aparecen en ningún importe (ver 4.11). El 14,7 % sale de dividir 1.607,66 € entre 10.973,30 €, que es lo ingresado más lo cedido por esos seis productos.
+**Cómo se ha calculado:** líneas de los pedidos de la base con un precio inferior al de catálogo. El descuento es 1 menos el precio de la línea entre el precio de catálogo, y el importe no ingresado es la cantidad por la diferencia de precios. No tiene relación con los códigos promocionales, que no aparecen en ningún importe (ver 4.11). El 14,7 % sale de dividir 1.607,66 € entre 10.973,30 €, que es lo ingresado más lo cedido por esos seis productos.
 
 ```sql
 WITH base AS (
@@ -310,7 +310,7 @@ ORDER BY descuento_cedido_eur DESC;
 
 **Por qué importa:** el gasto de marketing se mantuvo entre 770 € y 833 € al mes de abril a junio, así que cada pedido de cliente nuevo pasó de costar unos 32 € a unos 78 €. Si la captación sigue cayendo, las ventas dependerán cada vez más de la recompra. Parte de la subida de la recompra es mecánica, porque cada mes hay más clientes que pueden repetir, pero la caída de los nuevos no tiene esa explicación. Antes de mover dinero hacia retención (ver 1.8) convendría ver qué canales captan de verdad clientes nuevos.
 
-**Cómo lo he calculado:** el primer pedido es el primer pedido entregado del cliente (los datos empiezan en enero, así que no hay compras anteriores) y el recurrente es cualquier pedido posterior. El coste por pedido de cliente nuevo es aproximado: gasto total del mes (segunda query) entre los primeros pedidos de ese mes (769,95 € entre 24 en abril y 776,69 € entre 10 en junio). Incluye clientes que llegan por canales sin gasto.
+**Cómo se ha calculado:** el primer pedido es el primer pedido entregado del cliente (los datos empiezan en enero, así que no hay compras anteriores) y el recurrente es cualquier pedido posterior. El coste por pedido de cliente nuevo es aproximado: gasto total del mes (segunda query) entre los primeros pedidos de ese mes (769,95 € entre 24 en abril y 776,69 € entre 10 en junio). Incluye clientes que llegan por canales sin gasto.
 
 ```sql
 WITH base AS (
@@ -359,7 +359,7 @@ ORDER BY 1;
 
 **Por qué importa:** lo propongo en dos fases porque no sé si Email puede crecer de forma proporcional. En el tercer trimestre se mueven 324 € y se mira si Email conserva un IEC superior a 4,1 y si los pedidos de clientes nuevos (ver 1.7) se mantienen. Si es así, se mueve el resto en el cuarto trimestre, y si no, se para. Además, probar TikTok con 100 € al mes durante dos meses (unos 120 € más que al ritmo actual) cuesta poco y ayuda a saber si el canal escala (ver 1.4).
 
-**Cómo lo he calculado:** es una simulación lineal y no una previsión. El ritmo de gasto es el de marzo a junio dividido entre 4 y multiplicado por 6. El traslado es el 25 % del gasto de Meta en H2 y los ingresos son el traslado por el IEC de cada canal, con IVA y envío. El umbral es el IEC de Meta entre el de Email (4,06 / 15,08 = 27 %). Los datos de partida son los de 1.3.
+**Cómo se ha calculado:** es una simulación lineal y no una previsión. El ritmo de gasto es el de marzo a junio dividido entre 4 y multiplicado por 6. El traslado es el 25 % del gasto de Meta en H2 y los ingresos son el traslado por el IEC de cada canal, con IVA y envío. El umbral es el IEC de Meta entre el de Email (4,06 / 15,08 = 27 %). Los datos de partida son los de 1.3.
 
 ```sql
 WITH base AS (
@@ -423,7 +423,7 @@ El análisis se hace directamente sobre las tablas base de Supabase, sin crear e
 
 ### Base de trabajo
 
-Parto de los 767 pedidos de la tabla `orders`. Quito los 48 de julio (quedan 719) y los 11 marcados como eliminados (`deleted_at`), con lo que quedan 708. De ellos, 567 están entregados (`status = 'delivered'`). Por último dejo fuera 8 pedidos con un subtotal inferior a 1 €, que parecen errores de captura. La base de ventas queda en **559 pedidos** y **49.447,08 €**. La query `sql/00_cuadre_base.sql` comprueba estas cifras.
+Parto de los 767 pedidos de la tabla `orders`. Quito los 48 de julio (quedan 719) y los 11 marcados como eliminados (`deleted_at`), con lo que quedan 708. De ellos, 567 están entregados (`status = 'delivered'`). Por último dejo fuera 8 pedidos con un precio inferior a 1 €, que parecen errores de captura. La base de ventas queda en **559 pedidos** y **49.447,08 €**. La query `sql/00_cuadro_base.sql` comprueba estas cifras.
 
 ### Tablas y relaciones
 
@@ -456,9 +456,9 @@ Parto de los 767 pedidos de la tabla `orders`. Quito los 48 de julio (quedan 719
 
 El panel es un único recorrido de arriba abajo, con una barra para saltar a cada parte: ventas para dirección, canales para marketing, producto para el catálogo y promociones para ecommerce.
 Arriba van las cinco cifras clave con una frase que dice cómo se han calculado (pedidos entregados, sin eliminados ni pedidos de menos de 1 €), porque es lo primero que mira dirección y tiene que entenderse sin que nadie lo explique.
-Después van las ventas por mes y por país y, justo debajo, los canales con el título «Recomendación de inversión prioritaria», que es la decisión para la que se hace la reunión. Ordeno el ranking por IEC y dejo el ticket medio como una columna más, porque por ticket medio Meta Ads sería el primero y por IEC es el último (supuesto 4.10). TikTok sale en gris en el gráfico y con un aviso en ámbar en la tabla, para que nadie lo lea como un canal en el que meter más dinero.
-Los gráficos parten de cero, junio sale más claro porque tiene pedidos pendientes que todavía no cuentan como venta, y cada gráfico va con su tabla para ver la cifra exacta. Al pasar el ratón, el texto se ve claro sobre el fondo oscuro.
-Al principio el porcentaje de cada categoría iba en el color de acento y lo quité porque parecía una subida o una bajada. Ahora va en gris y con «del total» al lado. Los países también los cambié: aparecen como Alemania y España, no como DE y ES.
+Después van las ventas por mes y por país y, justo debajo, los canales con el título «Recomendación de inversión prioritaria», que es la decisión para la que se hace la reunión. Ordeno el ranking por IEC y dejo el ticket medio como una columna más, porque por ticket medio Meta Ads sería el primero y por IEC es el último (supuesto 4.10). TikTok sale en gris en el gráfico y con un aviso en la tabla, para que nadie lo lea como un canal en el que meter más dinero.
+
+Los gráficos parten de cero, junio sale más claro porque tiene pedidos pendientes que todavía no cuentan como venta, y cada gráfico va con su tabla para ver la cifra exacta. Los países también los cambié: aparecen como Alemania y España, no como DE y ES.
 Dejé fuera a propósito la evolución de clientes nuevos y recurrentes, los descuentos permanentes y el detalle de TikTok, que se quedan en el README. La propuesta del segundo semestre sí está, pero marcada como simulación y no como previsión. Quería un panel con poco texto, que se pueda leer sin nadie al lado.
 
 Cada cifra del panel sale de una query de `sql/dashboard/`, que la aplicación ejecuta tal cual contra Supabase, así que coincide con las del README. Varias son las mismas que las de las conclusiones y el resto (clientes y devoluciones, productos, categorías y códigos promocionales) las he añadido para cubrir lo que pide dirección.
