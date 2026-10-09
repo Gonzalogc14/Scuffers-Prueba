@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Scuffers · Resultados del primer semestre 2026',
-  description: 'Ventas, canales y producto de enero a junio de 2026.',
+  title: 'Resultados Primer Semestre 2026',
+  description: 'Ventas, Canales y Productos (enero - junio).',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
